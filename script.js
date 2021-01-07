@@ -15,13 +15,14 @@ const computerScissors = document.getElementById('computerScissors');
 const allGameIcons = document.querySelectorAll('.far');
 
 const choices = {
-  rock: { name: 'Rock', defeats: ['scissors', 'lizard'] },
-  paper: { name: 'Paper', defeats: ['rock', 'spock'] },
-  scissors: { name: 'Scissors', defeats: ['paper', 'lizard'] },
-  lizard: { name: 'Lizard', defeats: ['paper', 'spock'] },
-  spock: { name: 'Spock', defeats: ['scissors', 'rock'] },
+  rock: { name: 'Rock', defeats: 'scissors' },
+  paper: { name: 'Paper', defeats: 'rock'},
+  scissors: { name: 'Scissors', defeats: 'paper' },
 };
 
+// zmienne globalne
+let computerScoreNumber = 0;
+let palyerScoreNumber = 0;
 let computerChoice = '';
 
 // reset all 'seleceted' icons
@@ -65,17 +66,43 @@ function displayComputerChoice() {
       break;
   }
 }
+
+// check resoluts score
+function updateScore(playerChoice) {
+  // console.log(playerChoice, computerChoice);
+  if (playerChoice === computerChoice) {
+    resultText.textContent ='Its a tie!'
+  } else {
+    const choice = choices[playerChoice];
+    console.log(choice.defeats.indexOf(computerChoice));
+    if (choice.defeats.indexOf(computerChoice) > -1) {
+      resultText.textContent = 'you won';
+      palyerScoreNumber++;
+      playerScoreEl.textContent = palyerScoreNumber;
+    } else {
+      resultText.textContent = 'You lost'
+      computerScoreNumber++;
+      computerScoreEl.textContent = computerScoreNumber;
+
+    }
+  }
+
+}
+
+
+
 // call function for turn
-function checkResult() {
+function checkResult(playerChoice) {
   resetSelected();
   computerRandomChoice();
   displayComputerChoice();
+  updateScore(playerChoice)
 }
 
 // passing player onclick
 
 function select(playerChoice) {
-  checkResult();
+  checkResult(playerChoice);
   //  add 'selected' styling and player choice
   switch (playerChoice) {
     case 'rock':
